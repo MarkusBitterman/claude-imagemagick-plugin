@@ -1,0 +1,9 @@
+{
+  "name": "imagemagick",
+  "description": "ImageMagick/GraphicsMagick expertise for Claude Code — skills for image conversion, resizing, compositing, batch processing, and other command-line image manipulation",
+  "version": "0.1.0",
+  "author": {
+    "name": "bittermang",
+    "email": "bittermang@duck.com"
+  }
+}

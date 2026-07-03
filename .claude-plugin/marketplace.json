@@ -1,0 +1,13 @@
+{
+  "name": "claude-imagemagick-plugin",
+  "owner": {
+    "name": "bittermang"
+  },
+  "plugins": [
+    {
+      "name": "imagemagick",
+      "source": "./",
+      "description": "ImageMagick/GraphicsMagick expertise for Claude Code"
+    }
+  ]
+}
