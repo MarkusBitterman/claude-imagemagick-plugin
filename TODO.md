@@ -8,6 +8,8 @@
 - [x] References: geometry, recipes, GM/IM6 compatibility
 - [x] User-invoked `/img` command
 - [x] CLAUDE.md, TODO.md, README.md, git repo
+- [x] `references/generative.md` — images-from-nothing: canvases, typesetting, effects, distortions
+- [x] `scripts/fold-paper.sh` — worked example: .txt → folded-letter photo (verified locally)
 
 ## v0.2 — verify & harden
 
@@ -22,7 +24,8 @@
 - [ ] `references/formats.md` — format-specific knowledge: PNG bit depths (`png8:`/`png32:`), WebP/AVIF encoder options, HEIC, ICO multi-resolution, TIFF compression
 - [ ] `references/color.md` — color management: ICC profiles, sRGB vs linear, `-colorspace` traps, dithering, palette reduction (`-colors`, `-remap`)
 - [ ] `references/drawing.md` — `-draw` primitives, gradients, `xc:` canvases, generating placeholder/test images from nothing
-- [ ] `references/fx-and-distort.md` — `-fx` expressions, `-distort` (perspective, arc, lens correction), morphology
+- [ ] `references/fx-and-distort.md` — `-fx` expressions, deeper `-distort` coverage (SRT, arc, lens correction, displacement maps), morphology
+- [ ] More worked scripts alongside fold-paper.sh: page curl, coffee-stain/aged paper, screenshot-to-browser-mockup, sprite-sheet slicer
 - [ ] Fred's scripts catalog skill: index the ~380 fmwconcepts scripts by task so Claude can recommend/adapt the right one (respect the non-commercial license — link and describe, don't vendor)
 - [ ] `/img-compare` command — visual diff two images (compare + montage side-by-side)
 - [ ] `/img-optimize` command — batch web optimization with before/after size report

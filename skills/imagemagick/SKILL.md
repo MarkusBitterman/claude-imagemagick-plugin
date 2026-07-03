@@ -1,6 +1,6 @@
 ---
 name: imagemagick
-description: This skill should be used when the user asks to "resize an image", "convert an image" (PNG/JPEG/WebP/AVIF/GIF/TIFF/etc.), "crop", "compress", "optimize", "composite", "watermark", "annotate", "montage", "make a thumbnail", "strip metadata", "batch process images", "make an animated GIF", or otherwise manipulate, inspect, or generate raster images from the command line with ImageMagick or GraphicsMagick.
+description: This skill should be used when the user asks to "resize an image", "convert an image" (PNG/JPEG/WebP/AVIF/GIF/TIFF/etc.), "crop", "compress", "optimize", "composite", "watermark", "annotate", "montage", "make a thumbnail", "strip metadata", "batch process images", "make an animated GIF", "generate an image", "add a drop shadow", "make a placeholder/test image", "render text as an image", "make it look like paper/polaroid/folded", or otherwise manipulate, inspect, or generate raster images from the command line with ImageMagick or GraphicsMagick.
 version: 0.1.0
 ---
 
@@ -23,7 +23,7 @@ magick [input-settings] input.img [operators] output.img
 - **`magick` replaces `convert`.** The bare `convert` still works in IM7 but is deprecated (and on Windows collides with a system tool). Prefer `magick`.
 - **Order matters.** *Settings* (e.g. `-quality`, `-density`, `-background`) persist and affect later operations; *operators* (e.g. `-resize`, `-crop`, `-rotate`) act immediately on the images currently in the stack. Settings placed *before* an input affect reading (`-density 300 input.pdf`); operators placed *after* affect the loaded image.
 - The output file is always the **last argument**. Its extension selects the encoder; force one explicitly with a prefix: `png32:out.png`, `jpeg:out.img`.
-- Read a specific frame/page with index syntax: `input.gif[0]`, `document.pdf[0-2]`.
+- Read a specific frame/page with index syntax: `input.gif[0]`, `document.pdf[0-2]` — quote these in the shell; brackets glob in zsh/bash.
 
 ## Core operations quick reference
 
@@ -42,7 +42,7 @@ magick [input-settings] input.img [operators] output.img
 | Contact sheet | `magick montage *.jpg -tile 4x -geometry +5+5 sheet.png` |
 | Compare two images | `magick compare -metric RMSE a.png b.png diff.png` |
 
-Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `references/geometry.md`. Multi-step recipes (watermarking, PDF rasterization, color work, batch patterns) are in `references/recipes.md`.
+Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `references/geometry.md`. Multi-step recipes (watermarking, PDF rasterization, color work, batch patterns) are in `references/recipes.md`. For *creating* images from nothing — synthesized canvases, typesetting text files, shadows/polaroids/vignettes, warps and distortions — see `references/generative.md` and the worked `scripts/fold-paper.sh` example.
 
 ## Batch processing
 
