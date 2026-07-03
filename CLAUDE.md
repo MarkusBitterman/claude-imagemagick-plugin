@@ -19,6 +19,9 @@ skills/
       gm-and-im6.md     # GraphicsMagick + ImageMagick 6 compatibility
   img/                  # user-invoked: /img <natural-language task>
     SKILL.md
+  img-compare/ img-optimize/   # more user-invoked commands
+agents/                 # subagents (photo-batch, image-auditor) — frontmatter
+                        # supports skills: to preload the imagemagick skill
 TODO.md                 # roadmap — check here before adding features
 ```
 
