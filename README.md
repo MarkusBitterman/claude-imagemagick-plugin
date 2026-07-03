@@ -10,7 +10,7 @@ ImageMagick/GraphicsMagick expertise for [Claude Code](https://claude.com/claude
 ## Install
 
 ```
-/plugin marketplace add bittermang/claude-imagemagick-plugin
+/plugin marketplace add MarkusBitterman/claude-imagemagick-plugin
 /plugin install imagemagick
 ```
 

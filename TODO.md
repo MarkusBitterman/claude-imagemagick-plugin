@@ -35,8 +35,9 @@
 - [ ] Screenshot/GIF demo in README
 - [ ] Hooks idea: PostToolUse hook that runs `magick identify` on any image file Claude writes, as an automatic sanity check
 - [ ] Consider an agent (`agents/`) for long batch jobs over large photo sets
-- [ ] Publish to GitHub; test `/plugin marketplace add bittermang/claude-imagemagick-plugin`
-- [ ] Maybe: submit to a community marketplace
+- [x] Publish to GitHub: https://github.com/MarkusBitterman/claude-imagemagick-plugin
+- [ ] Test `/plugin marketplace add MarkusBitterman/claude-imagemagick-plugin` from a clean session
+- [ ] Submit to the official directory: https://clau.de/plugin-directory-submission (needs license, category, tagged release first)
 
 ## Open questions
 
