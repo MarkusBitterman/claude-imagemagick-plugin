@@ -6,6 +6,16 @@ ImageMagick expertise for [Claude Code](https://claude.com/claude-code) — teac
 
 Every image in this README was created by ImageMagick from nothing, by the recipes this plugin documents. Regenerate them with `scripts/make-demo.sh`.
 
+## Contents
+
+- [What you get](#what-you-get) — the skill, the references, the scripts, the commands
+- [Show, don't tell](#show-dont-tell) — demo images, all ImageMagick-generated
+- [Usage](#usage) — trigger phrases and slash commands
+- [Install](#install) · [Requirements](#requirements)
+- [Structure](#structure) — repo layout
+- [Testing](#testing) — the 144-check smoke suite
+- [Status](#status) · [License](#license)
+
 ## What you get
 
 - **`imagemagick` skill** (model-invoked) — activates automatically when you ask Claude to resize, convert, crop, compress, composite, watermark, annotate, or batch-process images. Ships on-demand references so depth never bloats your context:
