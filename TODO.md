@@ -11,13 +11,21 @@
 - [x] `references/generative.md` — images-from-nothing: canvases, typesetting, effects, distortions
 - [x] `scripts/fold-paper.sh` — worked example: .txt → folded-letter photo (verified locally)
 
-## v0.2 — verify & harden
+## v0.2 — verify & harden (done)
 
-- [ ] Test every command in SKILL.md and recipes.md against ImageMagick 7.1.2 locally; fix any that fail
-- [ ] Add `test-images/` fixtures (tiny PNG/JPEG/GIF/SVG) + a `scripts/verify-recipes.sh` smoke test
-- [ ] Trigger-test the skill description: does "make this image smaller" activate it? Tune phrases
-- [ ] Choose a license (example-plugin uses Apache-2.0)
-- [ ] Verify `gm-and-im6.md` claims against a real GraphicsMagick install (container or Nix shell: `nix shell nixpkgs#graphicsmagick`)
+- [x] Test every command in SKILL.md and recipes.md against ImageMagick 7.1.2 locally; fix any that fail
+      — also swept geometry.md and generative.md; fixed: missing `mkdir` in batch-loop example,
+      bogus `-list pattern` and `-list format-characters`, SVG density math (librsvg scales at
+      density/96, not /72), PDF missing-gs vs policy error note, `compare` exit-1 pitfall
+- [x] Add `test-images/` fixtures (tiny PNG/JPEG/GIF/SVG) + a `scripts/verify-recipes.sh` smoke test
+      — 80 checks; PDF/PS cases skip without Ghostscript (run via `nix shell nixpkgs#ghostscript`)
+- [x] Trigger-test the skill description: does "make this image smaller" activate it? Tune phrases
+      — headless `claude --plugin-dir … -p` runs: all 3 phrasings (webp convert, "make smaller",
+      watermark) invoked `imagemagick:imagemagick`; no tuning needed
+- [x] Choose a license (example-plugin uses Apache-2.0) — Apache-2.0; LICENSE + plugin.json field
+- [x] Verify `gm-and-im6.md` claims against a real GraphicsMagick install (container or Nix shell: `nix shell nixpkgs#graphicsmagick`)
+      — GM 1.3.47: fixed `-annotate` (doesn't exist at all), `label:`/`caption:` (do auto-size),
+      exact compare metric list, `caption:@file` hangs GM
 
 ## v0.3 — more skills
 

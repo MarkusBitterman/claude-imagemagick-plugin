@@ -33,10 +33,14 @@ TODO.md                 # roadmap — check here before adding features
 
 ## Testing changes
 
+- Smoke test: `scripts/verify-recipes.sh` runs every documented command against the
+  `test-images/` fixtures. The command list is hand-maintained — when you add or edit a
+  command in SKILL.md or `references/*.md`, add/update the matching line there. Run PDF/PS
+  cases with `nix shell nixpkgs#ghostscript --command scripts/verify-recipes.sh`.
 - Validate JSON: `python3 -m json.tool .claude-plugin/plugin.json`
 - Load locally: `claude --plugin-dir /home/bittermang/Developments/claude-imagemagick-plugin`, then check the skills appear in `/help` and that `/img` works.
 - Trigger-test the model-invoked skill with a natural request ("convert test.png to webp") and confirm it activates.
-- Verify documented commands against the real binary before committing — this machine has ImageMagick 7.1.2 Q16-HDRI (Nix), **no GraphicsMagick**, so `gm-and-im6.md` content cannot be locally verified and should cite upstream docs.
+- Verify documented commands against the real binary before committing — this machine has ImageMagick 7.1.2 Q16-HDRI (Nix). GraphicsMagick is not installed, but `gm-and-im6.md` claims can be (and were, v0.2: GM 1.3.47 Q8) verified via `nix shell nixpkgs#graphicsmagick`.
 
 ## Upstream references
 

@@ -37,11 +37,12 @@ gm composite overlay.png base.png out.png
 gm batch commands.txt        # run many ops in one process (GM-only)
 ```
 
-Notable differences from ImageMagick:
+Notable differences from ImageMagick (verified against GM 1.3.47):
 
-- **No** `-annotate` percent-gravity niceties, no `label:`/`caption:` auto-sizing parity, fewer `-fx`/distortion/morphology operators, no AVIF/HEIC in most builds.
+- **`-annotate` does not exist** (`Unrecognized option`) — draw text with `-gravity` + `-draw "text 10,20 'Title'"` instead. `label:` and `caption:` *do* exist and auto-size/word-wrap like IM, but IM's `caption:@file` (read text from a file) is not supported and **hangs GM** — pass the text inline.
+- Fewer `-fx`/distortion/morphology operators; no AVIF/HEIC (`No encode delegate for this image format`).
 - Geometry flags (`^`, `!`, `>`, `<`, `%`) work the same.
 - `gm mogrify -output-directory dir/` is the equivalent of IM's `mogrify -path dir/` — use it; GM's mogrify also overwrites in place by default.
-- No `magick compare` metric parity; `gm compare -metric MSE a.png b.png` exists but supports fewer metrics.
+- `gm compare -metric` supports only MAE, MSE, PAE, PSNR, RMSE (no SSIM), and prints a multi-line table rather than IM's single number.
 
 **Rule of thumb:** for plain convert/resize/crop/quality work, GM commands are IM6 commands with `gm ` prefixed. For compositing, text, or modern formats, prefer real ImageMagick and tell the user if only GM is available.

@@ -37,4 +37,8 @@ TODO.md                         roadmap
 
 ## Status
 
-v0.1 — scaffold and core skill. See [TODO.md](TODO.md) for the roadmap.
+v0.2 — all documented commands verified against ImageMagick 7.1.2 (and GraphicsMagick 1.3.x for the compatibility reference); smoke test in `scripts/verify-recipes.sh`. See [TODO.md](TODO.md) for the roadmap.
+
+## License
+
+[Apache-2.0](LICENSE)

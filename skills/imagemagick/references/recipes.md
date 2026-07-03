@@ -53,11 +53,12 @@ for w in 480 800 1200 1600; do magick hero.jpg -resize ${w}x -quality 82 hero-${
 # Rasterize a PDF page at print resolution (density BEFORE input)
 magick -density 300 doc.pdf[0] -background white -flatten page1.png
 
-# SVG at 2x
-magick -density 144 -background none icon.svg icon.png
+# SVG at 2x — with the common librsvg delegate, SVG pixels are CSS pixels
+# (96/inch), so scale = density/96, not density/72. Verify the output size.
+magick -density 192 -background none icon.svg icon.png
 ```
 
-If PDF conversion fails with a policy error, the system ImageMagick `policy.xml` blocks Ghostscript formats; report this to the user rather than editing system config unprompted.
+Two distinct PDF failure modes: `FailedToExecuteCommand ... 'gs'` means Ghostscript is not installed; `not allowed by the security policy` means the system `policy.xml` blocks Ghostscript formats. Report either to the user rather than editing system config unprompted.
 
 ## Animated GIF
 
@@ -96,4 +97,4 @@ magick in.jpg -format '%[EXIF:*]' info:              # dump EXIF
 magick compare -metric SSIM a.png b.png null: 2>&1   # similarity score only
 ```
 
-`-format`/`-print` percent escapes (`%w`, `%h`, `%[mean]`, …) turn ImageMagick into a scriptable image-inspection tool; full list: `magick identify -list format-characters` or the docs.
+`-format`/`-print` percent escapes (`%w`, `%h`, `%[mean]`, …) turn ImageMagick into a scriptable image-inspection tool; full list: https://imagemagick.org/script/escape.php (there is no `-list` type for them — `magick -list list` shows what can be listed). Note `magick compare` exits 1 when images differ; that is a result, not an error.

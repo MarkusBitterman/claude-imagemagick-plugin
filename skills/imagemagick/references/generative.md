@@ -17,8 +17,9 @@ magick -size 100x100 pattern:checkerboard -scale 800x800 checks.png
 magick -size 800x600 gradient: -function Sinusoid 4,90 waves.png
 ```
 
-`-list pattern`, `-list gradient` show what's built in. Combine with
-`-compose`/`-fx` for procedural textures.
+`magick -list gradient` shows the gradient types; there is no `-list pattern` —
+built-in patterns are enumerated at https://imagemagick.org/script/formats.php
+(pseudo-formats). Combine with `-compose`/`-fx` for procedural textures.
 
 ## Typesetting text and documents
 

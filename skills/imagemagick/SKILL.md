@@ -47,8 +47,9 @@ Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `referenc
 ## Batch processing
 
 - `mogrify` edits **in place** and is the most common way users destroy originals. Always use `-path` to redirect output: `magick mogrify -path out/ -resize 50% *.jpg` (create `out/` first).
-- For anything nontrivial, prefer an explicit shell loop with `magick` — it is easier to verify and interrupt:
+- For anything nontrivial, prefer an explicit shell loop with `magick` — it is easier to verify and interrupt. `magick` does not create output directories; make them first:
   ```sh
+  mkdir -p resized
   for f in *.png; do magick "$f" -resize 1200x "resized/${f%.png}.jpg"; done
   ```
 
@@ -58,5 +59,6 @@ Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `referenc
 - After `-crop`, the image keeps its virtual canvas offset; add `+repage` or later operations behave strangely.
 - PDF/SVG input rasterizes at 72 DPI by default — set `-density 300` *before* the input filename for usable resolution. PDF support requires Ghostscript and may be blocked by the system `policy.xml`.
 - Converting to JPEG silently drops the alpha channel (usually onto black). Flatten onto an explicit `-background` first.
+- `magick compare` exits **1 when the images differ** (0 = identical, 2 = error). That nonzero exit is normal output, but it aborts scripts running under `set -e` — append `|| true` or check for exit 2 specifically.
 - Very large images can exhaust memory; check/raise limits with `-limit memory 2GiB -limit disk 4GiB` or inspect `magick identify -list resource`.
 - HDRI builds (`Q16-HDRI` in `-version`) allow out-of-range pixel values; add `-clamp` before writing if results look blown out after arithmetic operations.
