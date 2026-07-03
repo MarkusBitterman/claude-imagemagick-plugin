@@ -1,7 +1,7 @@
 ---
 name: imagemagick
 description: This skill should be used when the user asks to "resize an image", "convert an image" (PNG/JPEG/WebP/AVIF/HEIC/GIF/TIFF/etc.), "crop", "compress", "optimize", "composite", "watermark", "annotate", "montage", "make a thumbnail", "strip metadata", "batch process images", "make an animated GIF", "generate an image", "add a drop shadow", "make a placeholder/test image", "render text as an image", "make it look like paper/polaroid/folded", "make a favicon", "reduce the number of colors", "fix washed-out colors", "convert a color profile (ICC)", "dither an image", "draw shapes/lines on an image", "apply a displacement or warp", or otherwise manipulate, inspect, or generate raster images from the command line with ImageMagick or GraphicsMagick.
-version: 0.1.0
+version: 0.3.0
 ---
 
 # ImageMagick

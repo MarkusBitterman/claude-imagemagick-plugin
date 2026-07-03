@@ -18,7 +18,7 @@ Every image in this README was created by ImageMagick from nothing, by the recip
   - `fx-and-distort.md` — `-fx` per-pixel math, deep `-distort`, morphology
   - `gm-and-im6.md` — GraphicsMagick and ImageMagick 6 compatibility (verified against GM 1.3.47)
 - **Worked-effect scripts** — original, locally verified IM7 implementations in `skills/imagemagick/scripts/`: folded letters (`fold-paper.sh`), loose paper stacks (`paper-stack.sh`), aged coffee-stained paper (`age-paper.sh`), page turns (`page-turn.sh`), browser-window mockups (`browser-mockup.sh`), social/OG cards (`social-card.sh`), sprite-sheet slicing (`sprite-slice.sh`).
-- **`/img` command** (user-invoked) — `/img resize photo.jpg to 800px wide as webp`. Inspects inputs first, never overwrites originals, verifies outputs.
+- **Slash commands** (user-invoked) — `/img resize photo.jpg to 800px wide as webp` for any one-off operation; `/img-compare before.png after.png` for similarity metrics plus a labeled visual diff; `/img-optimize assets/` for batch web optimization with a before/after size report. All inspect inputs first, never overwrite originals, and verify outputs.
 
 ## Show, don't tell
 
@@ -72,7 +72,7 @@ Modeled on the official [example-plugin](https://github.com/anthropics/claude-pl
 .claude-plugin/plugin.json      plugin metadata
 .claude-plugin/marketplace.json direct-install support
 skills/imagemagick/             model-invoked skill + references/ + scripts/
-skills/img/                     /img slash command
+skills/img*/                    /img, /img-compare, /img-optimize commands
 scripts/verify-recipes.sh       smoke test: every documented command vs. fixtures
 scripts/make-demo.sh            regenerates the README demo images
 test-images/                    tiny PNG/JPEG/GIF/SVG fixtures

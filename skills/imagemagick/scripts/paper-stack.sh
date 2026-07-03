@@ -21,13 +21,13 @@ n=$want; [ "$total" -lt "$n" ] && n=$total
 
 # 2. Deterministic "mess": per-sheet rotation and drift, bottom sheet first.
 #    (Fixed tables, so the same input always yields the same stack.)
-angles="-8 6 -3 5 -1"
-xoffs="26 -20 12 -14 0"
-yoffs="18 14 -10 8 0"
+angles="-17 13 -9 11 -3"
+xoffs="95 -80 60 -55 0"
+yoffs="60 48 -40 34 0"
 
 W=$(magick identify -format %w "$tmp/page_000.png")
 H=$(magick identify -format %h "$tmp/page_000.png")
-CW=$((W * 13 / 10)); CH=$((H * 13 / 10))
+CW=$((W * 16 / 10)); CH=$((H * 15 / 10))
 magick -size "${CW}x${CH}" xc:none "$tmp/stack.png"
 
 i=$((n - 1))                       # last wanted page sits at the bottom
