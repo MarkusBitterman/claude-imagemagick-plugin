@@ -58,6 +58,11 @@ printf 'Smoke-test text file.\nSecond line.\n' > notes.txt
 
 HAVE_GS=; command -v gs >/dev/null && HAVE_GS=1
 HAVE_AVIF=; magick -list format 2>/dev/null | grep -q '^ *AVIF' && HAVE_AVIF=1
+HAVE_HEIC=; magick -list format 2>/dev/null | grep -q '^ *HEIC.*rw' && HAVE_HEIC=1
+HAVE_JXL=;  magick -list format 2>/dev/null | grep -q '^ *JXL' && HAVE_JXL=1
+# any ICC profile file on the system enables the profile assign/convert cases
+ICC_FILE=$(ls /usr/share/color/icc/*.icc /usr/share/color/icc/*/*.icc \
+  /nix/store/*colord*/share/color/icc/colord/sRGB.icc 2>/dev/null | head -1 || true)
 FONT_ARGS=()
 magick -list font 2>/dev/null | grep -q 'Font: DejaVu-Serif' && FONT_ARGS=(-font DejaVu-Serif)
 
@@ -162,6 +167,90 @@ run "barrel"              magick in.png -distort Barrel '0.0 0.0 0.05' d03.png
 run "wave"                magick in.png -wave 12x200 d04.png
 run "implode"             magick in.png -implode 0.4 d05.png
 run "shepards"            magick in.png -distort Shepards '200,100 250,100' d06.png
+
+echo "== references/formats.md"
+run "png8: prefix"        magick in.png png8:fm01.png
+run "png32: prefix"       magick in.png png32:fm02.png
+run "png compression"     magick in.png -define png:compression-level=9 fm03.png
+run "webp lossless"       magick in.png -define webp:lossless=true fm04.webp
+run "animated webp"       magick -delay 10 -loop 0 frame_001.png frame_002.png fm05.webp
+if [ -n "$HAVE_AVIF" ]; then
+  run "avif speed"        magick in.png -quality 55 -define heic:speed=8 fm06.avif
+  run "avif lossless"     magick tiny.png -define heic:lossless=true fm07.avif
+else
+  skip "avif speed/lossless" "no AVIF encoder"
+fi
+if [ -n "$HAVE_HEIC" ]; then
+  run "heic write"        magick in.png -quality 55 fm08.heic
+else
+  skip "heic write" "no HEIC encoder"
+fi
+if [ -n "$HAVE_JXL" ]; then
+  run "jxl lossy"         magick in.png -quality 90 fm09.jxl
+  run "jxl from jpeg"     magick in.jpg fm10.jxl
+else
+  skip "jxl" "no JXL encoder"
+fi
+run "ico multi-res"       magick logo.png -define icon:auto-resize=16,32,48 favicon.ico
+run "tiff zip"            magick in.png -compress Zip fm11.tif
+run "tiff jpeg"           magick in.png -compress JPEG fm12.tif
+run "tiff multipage"      magick frame_001.png frame_002.png fm13.tif
+run "tiff page read"      magick 'fm13.tif[1]' fm14.png
+
+echo "== references/color.md"
+run "linear-light resize" magick in.jpg -colorspace RGB -resize 50% -colorspace sRGB co01.jpg
+run "lineargray"          magick in.jpg -colorspace LinearGray co02.jpg
+run "colors 16"           magick photo.jpg -colors 16 co03.png
+run "no dither"           magick photo.jpg +dither -colors 16 co04.png
+run "remap file"          magick photo.jpg -remap co03.png co05.png
+run "remap netscape:"     magick photo.jpg -remap netscape: co06.png
+run "posterize"           magick photo.jpg -posterize 4 co07.png
+run "quantize LAB"        magick photo.jpg -quantize LAB -colors 16 co08.png
+run "ordered-dither o8x8" magick photo.jpg -ordered-dither o8x8,8 co09.png
+run "ordered halftone"    magick photo.jpg -colorspace Gray -ordered-dither h6x6a co10.png
+run "color-matrix"        magick in.jpg -color-matrix '1 0 0 0 1 0 0 0 1.08' co11.jpg
+run "normalize"           magick in.jpg -normalize co12.jpg
+if [ -n "$ICC_FILE" ]; then
+  run "icc assign"        magick photo.jpg -profile "$ICC_FILE" co13.jpg
+  run "icc extract"       magick co13.jpg co14.icc
+else
+  skip "icc assign/extract" "no .icc profile file found on system"
+fi
+
+echo "== references/drawing.md"
+run "draw line"           magick -size 200x200 xc:white -stroke black -strokewidth 3 -draw 'line 20,20 180,180' dr01.png
+run "draw roundrect"      magick -size 200x200 xc:white -fill none -stroke '#333' -strokewidth 4 -draw 'roundrectangle 20,20 180,180 15,15' dr02.png
+run "draw circle"         magick -size 200x200 xc:white -fill gold -draw 'circle 100,100 100,40' dr03.png
+run "draw ellipse arc"    magick -size 200x200 xc:white -fill none -stroke black -draw 'ellipse 100,100 80,60 45,270' dr04.png
+run "draw polygon"        magick -size 200x200 xc:white -fill seagreen -draw 'polygon 100,20 180,180 20,180' dr05.png
+run "draw bezier"         magick -size 200x200 xc:white -fill none -stroke purple -strokewidth 3 -draw 'bezier 20,180 60,20 140,20 180,180' dr06.png
+run "draw svg path"       magick -size 200x200 xc:white -fill orange -draw "path 'M 100,30 L 170,170 L 30,170 Z'" dr07.png
+run "fill-opacity"        magick -size 200x200 xc:white -draw 'fill red fill-opacity 0.4 rectangle 30,30 120,120 fill blue rectangle 80,80 170,170' dr08.png
+run "gravity draw text"   magick -size 200x100 xc:'#eee' -pointsize 20 -fill '#333' -gravity center -draw "text 0,0 'centered'" dr09.png
+run "push/pop rotate"     magick -size 200x200 xc:white -fill none -stroke black -draw 'push graphic-context translate 100,100 rotate 30 rectangle -60,-25 60,25 pop graphic-context' dr10.png
+run "image in draw"       magick -size 200x200 xc:'#ddd' -draw 'image over 40,40 64,64 "logo.png"' dr11.png
+run "placeholder"         magick -size 640x360 xc:'#dee2e6' -fill '#6c757d' -pointsize 48 -gravity center -annotate +0+0 '640x360' dr12.png
+
+echo "== references/fx-and-distort.md"
+run "fx average"          magick tiny.png -fx '(r+g+b)/3' fx01.png
+run "fx ternary"          magick tiny.png -fx 'u>0.5 ? 1 : 0' fx02.png
+run "fx two-image"        magick frame_001.png frame_002.png -fx '(u+v)/2' fx03.png
+run "fx neighbor"         magick tiny.png -fx 'p[-1,0]' fx04.png
+run "fx escape mean"      magick identify -format '%[fx:mean]' tiny.png
+run "fx escape aspect"    magick identify -format '%[fx:w/h]' tiny.png
+run "evaluate multiply"   magick tiny.png -evaluate multiply 0.5 fx05.png
+run "distort SRT"         magick in.png -background none -virtual-pixel transparent -distort SRT 30 fx06.png
+run "distort SRT full"    magick in.png -virtual-pixel edge -distort SRT '100,75 0.8 30 100,75' fx07.png
+run "+distort grows"      magick in.png -background none -virtual-pixel transparent +distort SRT 30 fx08.png
+run "distort Affine"      magick in.png -virtual-pixel white -distort Affine '0,0 0,0  200,0 200,30  0,150 20,150' fx09.png
+run "depolar/polar"       bash -c "magick in.png -distort DePolar 0 fx10.png && magick fx10.png -distort Polar 0 fx11.png"
+run "compose displace"    magick in.png \( -size 300x200 plasma: -blur 0x4 \) -compose displace -set option:compose:args 15x15 -composite fx12.png
+magick -size 200x200 xc:black -fill white -draw 'circle 100,100 100,55' morphshape.png
+run "morphology erode"    magick morphshape.png -morphology Erode Octagon:3 fx13.png
+run "morphology open"     magick morphshape.png -morphology Open Disk fx14.png
+run "morphology edgein"   magick morphshape.png -morphology EdgeIn Diamond fx15.png
+run "convolve laplacian"  magick tiny.png -morphology Convolve Laplacian:0 fx16.png
+run "custom kernel"       magick tiny.png -morphology Convolve '3x3: 0,1,0 1,-4,1 0,1,0' fx17.png
 
 echo "== scripts/fold-paper.sh"
 run "fold-paper.sh"       "$REPO/skills/imagemagick/scripts/fold-paper.sh" notes.txt folded.png

@@ -19,7 +19,8 @@ magick -size 800x600 gradient: -function Sinusoid 4,90 waves.png
 
 `magick -list gradient` shows the gradient types; there is no `-list pattern` —
 built-in patterns are enumerated at https://imagemagick.org/script/formats.php
-(pseudo-formats). Combine with `-compose`/`-fx` for procedural textures.
+(pseudo-formats). Combine with `-compose`/`-fx` for procedural textures. To draw
+shapes, paths, and text *onto* these canvases, see `drawing.md`.
 
 ## Typesetting text and documents
 
@@ -71,7 +72,8 @@ magick in.png -distort Shepards '200,200 250,200' local-warp.png  # move points,
 
 In `-distort Perspective`, substitute real pixel coordinates for `W`/`H`
 (compute them with `magick identify -format %w/%h`). Set `-virtual-pixel`
-*before* the distort or the exposed edges fill with garbage.
+*before* the distort or the exposed edges fill with garbage. For SRT/Affine/
+Polar distorts, displacement maps, `-fx`, and morphology, see `fx-and-distort.md`.
 
 ## Worked example: .txt → folded letter photo
 

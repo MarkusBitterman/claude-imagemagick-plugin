@@ -29,10 +29,14 @@
 
 ## v0.3 — more skills
 
-- [ ] `references/formats.md` — format-specific knowledge: PNG bit depths (`png8:`/`png32:`), WebP/AVIF encoder options, HEIC, ICO multi-resolution, TIFF compression
-- [ ] `references/color.md` — color management: ICC profiles, sRGB vs linear, `-colorspace` traps, dithering, palette reduction (`-colors`, `-remap`)
-- [ ] `references/drawing.md` — `-draw` primitives, gradients, `xc:` canvases, generating placeholder/test images from nothing
-- [ ] `references/fx-and-distort.md` — `-fx` expressions, deeper `-distort` coverage (SRT, arc, lens correction, displacement maps), morphology
+- [x] `references/formats.md` — format-specific knowledge: PNG bit depths (`png8:`/`png32:`), WebP/AVIF encoder options, HEIC, ICO multi-resolution, TIFF compression
+      — also covers JPEG XL (libjxl present in modern builds); found `heic:speed` is AVIF-only here
+- [x] `references/color.md` — color management: ICC profiles, sRGB vs linear, `-colorspace` traps, dithering, palette reduction (`-colors`, `-remap`)
+      — ICC assign-vs-convert verified with real profiles (colord); Gray keeps sRGB gamma, RGB/LinearGray linearize (measured)
+- [x] `references/drawing.md` — `-draw` primitives, gradients, `xc:` canvases, generating placeholder/test images from nothing
+      — canvases stayed in generative.md (cross-linked) to avoid duplication; includes placehold.co-style recipe
+- [x] `references/fx-and-distort.md` — `-fx` expressions, deeper `-distort` coverage (SRT, arc, lens correction, displacement maps), morphology
+      — displacement is `-compose displace`, not a distort; `-fx` has no string literals; fx-vs-evaluate perf gap measured small for simple exprs
 - [ ] More worked scripts alongside fold-paper.sh: page curl, coffee-stain/aged paper, screenshot-to-browser-mockup, sprite-sheet slicer
 - [ ] Fred's scripts catalog skill: index the ~380 fmwconcepts scripts by task so Claude can recommend/adapt the right one (respect the non-commercial license — link and describe, don't vendor)
 - [ ] `/img-compare` command — visual diff two images (compare + montage side-by-side)

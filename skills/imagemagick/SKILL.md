@@ -1,6 +1,6 @@
 ---
 name: imagemagick
-description: This skill should be used when the user asks to "resize an image", "convert an image" (PNG/JPEG/WebP/AVIF/GIF/TIFF/etc.), "crop", "compress", "optimize", "composite", "watermark", "annotate", "montage", "make a thumbnail", "strip metadata", "batch process images", "make an animated GIF", "generate an image", "add a drop shadow", "make a placeholder/test image", "render text as an image", "make it look like paper/polaroid/folded", or otherwise manipulate, inspect, or generate raster images from the command line with ImageMagick or GraphicsMagick.
+description: This skill should be used when the user asks to "resize an image", "convert an image" (PNG/JPEG/WebP/AVIF/HEIC/GIF/TIFF/etc.), "crop", "compress", "optimize", "composite", "watermark", "annotate", "montage", "make a thumbnail", "strip metadata", "batch process images", "make an animated GIF", "generate an image", "add a drop shadow", "make a placeholder/test image", "render text as an image", "make it look like paper/polaroid/folded", "make a favicon", "reduce the number of colors", "fix washed-out colors", "convert a color profile (ICC)", "dither an image", "draw shapes/lines on an image", "apply a displacement or warp", or otherwise manipulate, inspect, or generate raster images from the command line with ImageMagick or GraphicsMagick.
 version: 0.1.0
 ---
 
@@ -42,7 +42,7 @@ magick [input-settings] input.img [operators] output.img
 | Contact sheet | `magick montage *.jpg -tile 4x -geometry +5+5 sheet.png` |
 | Compare two images | `magick compare -metric RMSE a.png b.png diff.png` |
 
-Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `references/geometry.md`. Multi-step recipes (watermarking, PDF rasterization, color work, batch patterns) are in `references/recipes.md`. For *creating* images from nothing — synthesized canvases, typesetting text files, shadows/polaroids/vignettes, warps and distortions — see `references/generative.md` and the worked `scripts/fold-paper.sh` example.
+Geometry syntax (`800x600`, `^`, `!`, `>`, `<`, `%`) is subtle — see `references/geometry.md`. Multi-step recipes (watermarking, PDF rasterization, batch patterns) are in `references/recipes.md`. For *creating* images from nothing — synthesized canvases, typesetting text files, shadows/polaroids/vignettes — see `references/generative.md` and the worked `scripts/fold-paper.sh` example. Encoder specifics (PNG8/32, WebP/AVIF/HEIC/JXL options, multi-res ICO, TIFF compression) are in `references/formats.md`; colorspaces, ICC profiles, palettes and dithering in `references/color.md`; the `-draw` vector language in `references/drawing.md`; `-fx` math, deep `-distort`, and morphology in `references/fx-and-distort.md`.
 
 ## Batch processing
 
