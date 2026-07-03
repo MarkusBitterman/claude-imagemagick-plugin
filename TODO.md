@@ -37,8 +37,19 @@
       — canvases stayed in generative.md (cross-linked) to avoid duplication; includes placehold.co-style recipe
 - [x] `references/fx-and-distort.md` — `-fx` expressions, deeper `-distort` coverage (SRT, arc, lens correction, displacement maps), morphology
       — displacement is `-compose displace`, not a distort; `-fx` has no string literals; fx-vs-evaluate perf gap measured small for simple exprs
-- [ ] More worked scripts alongside fold-paper.sh: page curl, coffee-stain/aged paper, screenshot-to-browser-mockup, sprite-sheet slicer
-- [ ] Fred's scripts catalog skill: index the ~380 fmwconcepts scripts by task so Claude can recommend/adapt the right one (respect the non-commercial license — link and describe, don't vendor)
+- [x] More worked scripts alongside fold-paper.sh: page curl, coffee-stain/aged paper, screenshot-to-browser-mockup, sprite-sheet slicer
+      — shipped as page-turn.sh (renamed: no curl confusion), age-paper.sh, browser-mockup.sh,
+      sprite-slice.sh, plus paper-stack.sh (README-as-paper flagship demo) and social-card.sh;
+      found+documented: -compose is sticky across -layers merge; softlight blows midtone
+      overlays to white on Q16-HDRI (use overlay)
+- [x] ~~Fred's scripts catalog~~ → dropped by design: no third-party references in plugin content.
+      Instead: an original effects library ("spiritual successor"), three lanes — fresh takes on
+      the classic effects, modern gaps the old collections never covered (web/social/dev
+      workflows), repeatable tools over one-off filters. First six scripts shipped above.
+- [ ] Effects library backlog (originals, verify-first): tiny-planet (DePolar), tilt-shift,
+      vignette presets, LQIP/blurred-placeholder generator, favicon-pack.sh (logo → ICO+PNG set),
+      watermark-batch.sh, qr-brand.sh (style a QR from `qrencode` — IM can't do Reed-Solomon
+      itself; needs the qrencode dependency)
 - [ ] `/img-compare` command — visual diff two images (compare + montage side-by-side)
 - [ ] `/img-optimize` command — batch web optimization with before/after size report
 

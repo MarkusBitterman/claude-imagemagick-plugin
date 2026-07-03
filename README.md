@@ -10,9 +10,14 @@ Every image in this README was created by ImageMagick from nothing, by the recip
 
 - **`imagemagick` skill** (model-invoked) — activates automatically when you ask Claude to resize, convert, crop, compress, composite, watermark, annotate, or batch-process images. Ships on-demand references so depth never bloats your context:
   - `geometry.md` — the `800x600^`/`>`/`!`/`%` resize grammar and exact-size patterns
-  - `recipes.md` — watermarks, web optimization, PDF/SVG rasterization, animated GIFs, color work
-  - `generative.md` — canvases, typesetting, shadows/polaroids/vignettes, warps and distortions
+  - `recipes.md` — watermarks, web optimization, PDF/SVG rasterization, animated GIFs
+  - `generative.md` — canvases, typesetting, shadows/polaroids/vignettes, warps
+  - `formats.md` — PNG variants, WebP/AVIF/HEIC/JXL encoders, multi-res ICO, TIFF
+  - `color.md` — sRGB vs linear, ICC profiles, palettes and dithering
+  - `drawing.md` — the `-draw` vector language, SVG paths, placeholder images
+  - `fx-and-distort.md` — `-fx` per-pixel math, deep `-distort`, morphology
   - `gm-and-im6.md` — GraphicsMagick and ImageMagick 6 compatibility (verified against GM 1.3.47)
+- **Worked-effect scripts** — original, locally verified IM7 implementations in `skills/imagemagick/scripts/`: folded letters (`fold-paper.sh`), loose paper stacks (`paper-stack.sh`), aged coffee-stained paper (`age-paper.sh`), page turns (`page-turn.sh`), browser-window mockups (`browser-mockup.sh`), social/OG cards (`social-card.sh`), sprite-sheet slicing (`sprite-slice.sh`).
 - **`/img` command** (user-invoked) — `/img resize photo.jpg to 800px wide as webp`. Inspects inputs first, never overwrites originals, verifies outputs.
 
 ## Show, don't tell
@@ -21,9 +26,9 @@ One synthesized scene (sky, sun, and mountains drawn from primitives — no inpu
 
 ![effects montage](demo/effects.jpg)
 
-And the flagship worked example, `skills/imagemagick/scripts/fold-paper.sh` — a plain `.txt` file typeset, creased with gradient lighting, warped into perspective, and given a drop shadow:
+And the flagship worked example, `skills/imagemagick/scripts/paper-stack.sh` — the README you are reading right now, typeset into letter pages and photographed as a loose stack (yes, this image contains this sentence):
 
-![folded letter from a text file](demo/fold-paper.png)
+![this README as a loose stack of typeset pages](demo/paper-stack.png)
 
 ## Usage
 

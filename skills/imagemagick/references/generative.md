@@ -93,7 +93,7 @@ then multiply/screen/copy_opacity them onto the subject* — generalizes to most
 
 ## Also see
 
-Fred Weinhaus maintains ~380 ready-made effect scripts (page curl, texture,
-weave, emboss, kaleidoscope…): https://www.fmwconcepts.com/imagemagick/index.php
-— non-commercial license; adapt techniques, don't vendor the scripts.
 Anthony Thyssen's examples are the canonical deep dive: https://imagemagick.org/Usage/
+More worked scripts (paper stacks, aged paper, page turns, browser mockups,
+social cards, sprite slicing) live alongside fold-paper.sh in this skill's
+`scripts/` directory — all original, IM7-native, locally verified.

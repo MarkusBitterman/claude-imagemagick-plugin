@@ -252,8 +252,16 @@ run "morphology edgein"   magick morphshape.png -morphology EdgeIn Diamond fx15.
 run "convolve laplacian"  magick tiny.png -morphology Convolve Laplacian:0 fx16.png
 run "custom kernel"       magick tiny.png -morphology Convolve '3x3: 0,1,0 1,-4,1 0,1,0' fx17.png
 
-echo "== scripts/fold-paper.sh"
-run "fold-paper.sh"       "$REPO/skills/imagemagick/scripts/fold-paper.sh" notes.txt folded.png
+echo "== worked scripts (skills/imagemagick/scripts/)"
+SCRIPTS="$REPO/skills/imagemagick/scripts"
+run "fold-paper.sh"       "$SCRIPTS/fold-paper.sh" notes.txt folded.png
+run "paper-stack.sh"      "$SCRIPTS/paper-stack.sh" notes.txt stacked.png 2
+run "age-paper.sh"        "$SCRIPTS/age-paper.sh" folded.png aged.png
+run "page-turn.sh"        "$SCRIPTS/page-turn.sh" photo.jpg turned.png
+run "browser-mockup.sh"   "$SCRIPTS/browser-mockup.sh" photo.jpg mockup.png "example.dev"
+run "sprite-slice.sh"     "$SCRIPTS/sprite-slice.sh" photo.jpg 160x120 sprites/
+run "sprite reassemble"   "$SCRIPTS/sprite-slice.sh" --assemble 4 resheet.png sprites/tile_000.png sprites/tile_001.png sprites/tile_002.png sprites/tile_003.png
+run "social-card.sh"      "$SCRIPTS/social-card.sh" ogcard.png "Smoke test card" "subtitle line" "example.dev"
 
 echo
 echo "$PASS passed, $FAIL failed, $SKIP skipped"

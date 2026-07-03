@@ -46,5 +46,8 @@ TODO.md                 # roadmap — check here before adding features
 
 - Command-line options: https://imagemagick.org/command-line-options/
 - Usage examples: https://imagemagick.org/examples/
-- Fred's ImageMagick scripts (candidate recipes — mind the license, non-commercial): https://www.fmwconcepts.com/imagemagick/index.php
 - GraphicsMagick: http://www.graphicsmagick.org/utilities.html
+
+Note: third-party script collections (e.g. fmwconcepts) carry restrictive licenses —
+do not reference, vendor, or port them in plugin content. Effects ship as original
+IM7 implementations in `skills/imagemagick/scripts/`, verified locally.
