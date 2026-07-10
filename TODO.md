@@ -63,9 +63,9 @@ Versioning: one milestone chunk per minor version, rolling 0.4 → 0.5 → … �
       as one line (URL became malformed); README now says to run them one at a time; flow
       validated locally with the `claude plugin` CLI
 
-## v0.5 — agents, chunk two
+## v0.5 — agents, chunk two (done)
 
-- [ ] effect-artist (generate → look → self-critique → iterate loop) and
+- [x] effect-artist (generate → look → self-critique → iterate loop) and
       design-critic — a collaborative second set of eyes on UI/design screenshots: themes,
       structure, areas for improvement; accessibility and UX checks; "bad but close" calls
       where a color/alignment tweak rescues the design; direction-shaping guidance when the
@@ -73,6 +73,18 @@ Versioning: one milestone chunk per minor version, rolling 0.4 → 0.5 → … �
       WCAG-ish contrast sampling, whitespace/alignment metrics); annotated-screenshot callouts
       best-effort, not the contract. Complements the official frontend-design plugin (it
       generates, we critique) — no hard dependency.
+      — measurement recipes verified vs known answers: `-colorspace LinearGray` +
+      `%[fx:(maxima+0.05)/(minima+0.05)]` reproduces WCAG 4.54:1 for #767676-on-white
+      (LinearGray = Rec.709 linear, same model WCAG uses); `%@` trims against the *corner*
+      color (full-bleed headers skew margins — crop to panel first); pixel-sample flat fills,
+      never glyph edges. effect-artist: criteria fixed *before* generating; iterate at final
+      resolution (blur/pointsize/shadow params are absolute px); ~5-iteration cap.
+      Routing: design-critic activates on natural phrasing ("second set of eyes",
+      accessibility check); effect-artist verified via explicit invocation — one-shot
+      "generate X" phrasings stay inline with the skill, which is the right split (agent =
+      iteration offload). Headless routing tests MUST pass `--permission-mode acceptEdits`:
+      this machine defaults to plan mode, and `-p` runs stall at ExitPlanMode with no user
+      to approve (burned several runs learning this).
 
 ## Rolling backlog (each future chunk takes the next version number)
 

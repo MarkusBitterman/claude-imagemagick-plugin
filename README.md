@@ -28,7 +28,7 @@ Every image in this README was created by ImageMagick from nothing, by the recip
   - `fx-and-distort.md` — `-fx` per-pixel math, deep `-distort`, morphology
   - `gm-and-im6.md` — GraphicsMagick and ImageMagick 6 compatibility (verified against GM 1.3.47)
 - **Worked-effect scripts** — original, locally verified IM7 implementations in `skills/imagemagick/scripts/`: folded letters (`fold-paper.sh`), loose paper stacks (`paper-stack.sh`), aged coffee-stained paper (`age-paper.sh`), page turns (`page-turn.sh`), browser-window mockups (`browser-mockup.sh`), social/OG cards (`social-card.sh`), sprite-sheet slicing (`sprite-slice.sh`).
-- **Agents** — `photo-batch` runs long batch jobs (hundreds/thousands of files) in a separate context: samples first, executes in verified chunks, returns a one-screen report. `image-auditor` is a read-only sweep for oversized assets, format mismatches, and EXIF/GPS privacy leaks, with an exact fix command per finding. Invoke via `@imagemagick:photo-batch` / `@imagemagick:image-auditor`, or just describe the job.
+- **Agents** — `photo-batch` runs long batch jobs (hundreds/thousands of files) in a separate context: samples first, executes in verified chunks, returns a one-screen report. `image-auditor` is a read-only sweep for oversized assets, format mismatches, and EXIF/GPS privacy leaks, with an exact fix command per finding. `effect-artist` runs a generate → look → self-critique → iterate loop for creative renders where the first attempt is rarely right, keeping every version so you can pick. `design-critic` is a second set of eyes on UI/design screenshots — palette, WCAG-style contrast, and whitespace measured with ImageMagick rather than guessed, and every finding tagged "bad" vs "close: here's the one-tweak rescue". Invoke via `@imagemagick:<agent-name>`, or just describe the job.
 - **Slash commands** (user-invoked) — `/img resize photo.jpg to 800px wide as webp` for any one-off operation; `/img-compare before.png after.png` for similarity metrics plus a labeled visual diff; `/img-optimize assets/` for batch web optimization with a before/after size report. All inspect inputs first, never overwrite originals, and verify outputs.
 
 ## Show, don't tell
@@ -96,7 +96,7 @@ Modeled on the official [example-plugin](https://github.com/anthropics/claude-pl
 .claude-plugin/marketplace.json direct-install support
 skills/imagemagick/             model-invoked skill + references/ + scripts/
 skills/img*/                    /img, /img-compare, /img-optimize commands
-agents/                         photo-batch, image-auditor subagents
+agents/                         photo-batch, image-auditor, effect-artist, design-critic subagents
 scripts/verify-recipes.sh       smoke test: every documented command vs. fixtures
 scripts/make-demo.sh            regenerates the README demo images
 test-images/                    tiny PNG/JPEG/GIF/SVG fixtures
