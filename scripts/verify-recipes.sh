@@ -9,8 +9,9 @@
 # source file.
 #
 # Skips (not failures): PDF/PS cases when Ghostscript is absent, AVIF when the
-# build lacks the encoder. On this machine run PDF cases via:
-#   nix shell nixpkgs#ghostscript --command scripts/verify-recipes.sh
+# build lacks the encoder, qr-brand.sh when qrencode is absent. On this
+# machine run everything via:
+#   nix shell nixpkgs#ghostscript nixpkgs#qrencode nixpkgs#zbar --command scripts/verify-recipes.sh
 
 set -u
 
@@ -262,6 +263,23 @@ run "browser-mockup.sh"   "$SCRIPTS/browser-mockup.sh" photo.jpg mockup.png "exa
 run "sprite-slice.sh"     "$SCRIPTS/sprite-slice.sh" photo.jpg 160x120 sprites/
 run "sprite reassemble"   "$SCRIPTS/sprite-slice.sh" --assemble 4 resheet.png sprites/tile_000.png sprites/tile_001.png sprites/tile_002.png sprites/tile_003.png
 run "social-card.sh"      "$SCRIPTS/social-card.sh" ogcard.png "Smoke test card" "subtitle line" "example.dev"
+run "tiny-planet.sh"      "$SCRIPTS/tiny-planet.sh" photo.jpg planet.png 300
+run "tiny-planet inverse" "$SCRIPTS/tiny-planet.sh" photo.jpg tunnel.png 300 --sky-center
+run "tilt-shift.sh"       "$SCRIPTS/tilt-shift.sh" photo.jpg tilted.jpg 60 12 5
+run "vignette soft"       "$SCRIPTS/vignette.sh" photo.jpg vig1.jpg soft
+run "vignette dark"       "$SCRIPTS/vignette.sh" photo.jpg vig2.jpg dark
+run "vignette white"      "$SCRIPTS/vignette.sh" photo.jpg vig3.jpg white
+run "vignette grunge"     "$SCRIPTS/vignette.sh" photo.jpg vig4.jpg grunge
+run "lqip.sh"             "$SCRIPTS/lqip.sh" photo.jpg 24 lqip-preview.png
+run "favicon-pack.sh"     "$SCRIPTS/favicon-pack.sh" logo.png favicons/
+assert_dims "favicon 512 icon" favicons/icon-512.png 512x512
+mkdir -p wmdir && cp photo.jpg in.jpg wmdir/
+run "watermark-batch.sh"  "$SCRIPTS/watermark-batch.sh" logo.png wmdir/ wmout/
+if command -v qrencode >/dev/null; then
+  run "qr-brand.sh"       "$SCRIPTS/qr-brand.sh" "smoke test" qr.png '#1a2b4a' white logo.png
+else
+  skip "qr-brand.sh" "qrencode not installed (nix shell nixpkgs#qrencode)"
+fi
 
 echo
 echo "$PASS passed, $FAIL failed, $SKIP skipped"

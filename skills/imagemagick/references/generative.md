@@ -94,6 +94,10 @@ then multiply/screen/copy_opacity them onto the subject* — generalizes to most
 ## Also see
 
 Anthony Thyssen's examples are the canonical deep dive: https://imagemagick.org/Usage/
-More worked scripts (paper stacks, aged paper, page turns, browser mockups,
-social cards, sprite slicing) live alongside fold-paper.sh in this skill's
-`scripts/` directory — all original, IM7-native, locally verified.
+More worked scripts live alongside fold-paper.sh in this skill's `scripts/`
+directory — all original, IM7-native, locally verified: paper stacks, aged
+paper, page turns, browser mockups, social cards, sprite slicing, tiny
+planets (`-distort Polar`), tilt-shift, vignette presets, LQIP/blurred
+placeholders, favicon packs, batch watermarking, and branded QR codes
+(qr-brand.sh needs `qrencode` — ImageMagick cannot compute QR
+error-correction itself).

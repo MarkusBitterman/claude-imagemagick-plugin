@@ -88,10 +88,25 @@ Versioning: one milestone chunk per minor version, rolling 0.4 → 0.5 → … �
 
 ## Rolling backlog (each future chunk takes the next version number)
 
-- [ ] Effects library backlog (originals, verify-first): tiny-planet (DePolar), tilt-shift,
+## v0.6 — effects library, chunk one (done)
+
+- [x] Effects library backlog (originals, verify-first): tiny-planet (DePolar), tilt-shift,
       vignette presets, LQIP/blurred-placeholder generator, favicon-pack.sh (logo → ICO+PNG set),
       watermark-batch.sh, qr-brand.sh (style a QR from `qrencode` — IM can't do Reed-Solomon
       itself; needs the qrencode dependency)
+      — all seven shipped, each prototyped on synthesized fixtures and eyeballed before
+      scripting. Found: tiny planet is `-distort Polar 0` (DePolar *unwraps* — the backlog
+      entry had it backwards), with `-rotate 180` first (ground→center) and
+      `-virtual-pixel edge` to fill the square's corners with sky; tilt-shift masks built
+      via `-fx` on a 1px column then `-scale`d wide (fast) — flat/gradient test images hide
+      blur, verify on detail; radial-gradient vignettes need
+      `-define gradient:extent=DiagonalDistance` + `-level` white-holds or multiply dims the
+      whole frame; a 140-byte 24px WebP makes a usable LQIP but `-strip` is load-bearing
+      (ICC alone can outweigh the pixels); iOS apple-touch icons get flattened (transparent
+      renders on black), and detailed logos mush out at 16px; branded QR verified
+      end-to-end with zbarimg scan-back (qrencode -l H survives recolor + 20%-width logo).
+      Smoke test now covers all scripts; full run:
+      `nix shell nixpkgs#ghostscript nixpkgs#qrencode nixpkgs#zbar --command scripts/verify-recipes.sh`
 - [ ] Hooks idea: PostToolUse hook that runs `magick identify` on any image file Claude writes, as an automatic sanity check
 - [ ] Confirm install + usage from a completely fresh conversation (user test drive)
 - [ ] Submit to the official directory: https://clau.de/plugin-directory-submission (needs license ✓, category, tagged release — `claude plugin tag` can cut the tag)
