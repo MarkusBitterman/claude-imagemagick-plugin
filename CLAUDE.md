@@ -22,6 +22,9 @@ skills/
   img-compare/ img-optimize/   # more user-invoked commands
 agents/                 # subagents (photo-batch, image-auditor) — frontmatter
                         # supports skills: to preload the imagemagick skill
+hooks/
+  hooks.json            # PostToolUse matcher wiring (auto-discovered; no plugin.json key needed)
+  identify-image.sh     # read-only sanity check: identify images produced by Bash commands
 TODO.md                 # roadmap — check here before adding features
 ```
 
@@ -44,6 +47,7 @@ TODO.md                 # roadmap — check here before adding features
 - Load locally: `claude --plugin-dir /home/bittermang/Developments/claude-imagemagick-plugin`, then check the skills appear in `/help` and that `/img` works.
 - Trigger-test the model-invoked skill with a natural request ("convert test.png to webp") and confirm it activates. Same pattern routing-tests agents: grep the `stream-json` output for the `Agent` tool_use.
 - Headless test runs (`claude -p …`) must pass `--model haiku` (don't spend expensive-model budget on routing tests — and a description that routes on Haiku is more robust anyway) and `--permission-mode acceptEdits` (this machine defaults to plan mode, which stalls `-p` runs at plan approval). Keep `--max-turns` small.
+- **Hook (`hooks/identify-image.sh`) testing:** unit-test by piping a JSON payload (`{"tool_input":{"command":"…"},"cwd":"…"}`) to the script and checking the emitted JSON — the smoke test does this for six cases. For end-to-end: `--plugin-dir` *does* load plugin hooks, but `--permission-mode acceptEdits` does **not** auto-approve Bash, so the tested command never runs — add `--allowedTools "Bash"` to let it execute (do **not** use `--permission-mode bypassPermissions`; the auto-mode classifier blocks headless bypass loops). PostToolUse hooks do **not** emit `hook_started`/`hook_response` events into `stream-json` (only SessionStart does), so confirm firing with a side-effect (a marker file), not by grepping the transcript.
 - Verify documented commands against the real binary before committing — this machine has ImageMagick 7.1.2 Q16-HDRI (Nix). GraphicsMagick is not installed, but `gm-and-im6.md` claims can be (and were, v0.2: GM 1.3.47 Q8) verified via `nix shell nixpkgs#graphicsmagick`.
 
 ## Upstream references

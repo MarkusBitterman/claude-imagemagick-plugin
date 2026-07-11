@@ -1,0 +1,17 @@
+{
+  "description": "imagemagick plugin — after a Bash command that produced an image, identify the output as an automatic sanity check (read-only, never blocks)",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/identify-image.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

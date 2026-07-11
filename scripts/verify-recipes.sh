@@ -281,6 +281,35 @@ else
   skip "qr-brand.sh" "qrencode not installed (nix shell nixpkgs#qrencode)"
 fi
 
+# --- PostToolUse hook: hooks/identify-image.sh. Feeds it sample tool payloads
+#     on stdin and checks the JSON it emits. Needs jq or python3 to read the
+#     payload (same as the hook); skips cleanly without both.
+HOOK="$REPO/hooks/identify-image.sh"
+if command -v jq >/dev/null || command -v python3 >/dev/null; then
+  assert_hook() { # assert_hook <label> <command> <want-substring | ''=silent>
+    local label="$1" cmd="$2" want="$3" got
+    got="$(printf '{"tool_input":{"command":"%s"},"cwd":"%s"}' "$cmd" "$PWD" | sh "$HOOK")"
+    if [ -z "$want" ]; then
+      if [ -z "$got" ]; then PASS=$((PASS+1)); printf 'PASS  %s (silent)\n' "$label"
+      else FAIL=$((FAIL+1)); printf 'FAIL  %s: expected silence, got %s\n' "$label" "$got"; fi
+    elif printf '%s' "$got" | grep -qF "$want"; then
+      PASS=$((PASS+1)); printf 'PASS  %s\n' "$label"
+    else
+      FAIL=$((FAIL+1)); printf 'FAIL  %s: %s not in %s\n' "$label" "$want" "$got"
+    fi
+  }
+  : > hookempty.png
+  printf 'not an image' > hookcorrupt.png
+  assert_hook "hook: valid image -> summary"    "magick a.png tiny.png"            "sanity check"
+  assert_hook "hook: 0-byte -> warning"         "magick a.png hookempty.png"       "0 bytes"
+  assert_hook "hook: corrupt -> warning"        "magick a.png hookcorrupt.png"     "not a decodable image"
+  assert_hook "hook: pseudo-output -> silent"   "magick identify tiny.png info:"   ""
+  assert_hook "hook: mogrify -> silent"         "magick mogrify -resize 50% tiny.png" ""
+  assert_hook "hook: non-magick -> silent"      "ls -la tiny.png"                  ""
+else
+  skip "identify-image hook" "needs jq or python3"
+fi
+
 echo
 echo "$PASS passed, $FAIL failed, $SKIP skipped"
 [ "$FAIL" -eq 0 ]

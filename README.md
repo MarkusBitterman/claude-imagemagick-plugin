@@ -30,6 +30,7 @@ Every image in this README was created by ImageMagick from nothing, by the recip
 - **Worked-effect scripts** — original, locally verified IM7 implementations in `skills/imagemagick/scripts/`: folded letters (`fold-paper.sh`), loose paper stacks (`paper-stack.sh`), aged coffee-stained paper (`age-paper.sh`), page turns (`page-turn.sh`), browser-window mockups (`browser-mockup.sh`), social/OG cards (`social-card.sh`), sprite-sheet slicing (`sprite-slice.sh`), tiny planets (`tiny-planet.sh`), miniature-faking tilt-shift (`tilt-shift.sh`), four vignette presets (`vignette.sh`), inline blurred placeholders (`lqip.sh`), full favicon sets (`favicon-pack.sh`), relative-scaled batch watermarking (`watermark-batch.sh`), and scan-verified branded QR codes (`qr-brand.sh`, needs `qrencode`).
 - **Agents** — `photo-batch` runs long batch jobs (hundreds/thousands of files) in a separate context: samples first, executes in verified chunks, returns a one-screen report. `image-auditor` is a read-only sweep for oversized assets, format mismatches, and EXIF/GPS privacy leaks, with an exact fix command per finding. `effect-artist` runs a generate → look → self-critique → iterate loop for creative renders where the first attempt is rarely right, keeping every version so you can pick. `design-critic` is a second set of eyes on UI/design screenshots — palette, WCAG-style contrast, and whitespace measured with ImageMagick rather than guessed, and every finding tagged "bad" vs "close: here's the one-tweak rescue". Invoke via `@imagemagick:<agent-name>`, or just describe the job.
 - **Slash commands** (user-invoked) — `/img resize photo.jpg to 800px wide as webp` for any one-off operation; `/img-compare before.png after.png` for similarity metrics plus a labeled visual diff; `/img-optimize assets/` for batch web optimization with a before/after size report. All inspect inputs first, never overwrite originals, and verify outputs.
+- **Automatic sanity-check hook** — a read-only `PostToolUse` hook that watches for Bash commands producing an image and runs `magick identify` on the output, handing Claude a one-line summary (format, dimensions, depth, colorspace, size) — or a warning when the file came out 0 bytes or won't decode. It catches the silent failures a blown-out geometry or a broken encoder leaves behind. It never blocks a command; disable it with `IMAGEMAGICK_HOOK_DISABLE=1`.
 
 ## Show, don't tell
 
@@ -112,6 +113,7 @@ Modeled on the official [example-plugin](https://github.com/anthropics/claude-pl
 skills/imagemagick/             model-invoked skill + references/ + scripts/
 skills/img*/                    /img, /img-compare, /img-optimize commands
 agents/                         photo-batch, image-auditor, effect-artist, design-critic subagents
+hooks/                          PostToolUse identify sanity-check hook
 scripts/verify-recipes.sh       smoke test: every documented command vs. fixtures
 scripts/make-demo.sh            regenerates the README demo images
 test-images/                    tiny PNG/JPEG/GIF/SVG fixtures
@@ -123,16 +125,16 @@ TODO.md                         roadmap
 ## Testing
 
 ```sh
-scripts/verify-recipes.sh                                          # 155 checks; PDF/QR/scan cases skip
+scripts/verify-recipes.sh                                          # 161 checks; PDF/QR/scan cases skip
 nix shell nixpkgs#ghostscript nixpkgs#qrencode nixpkgs#zbar \
-  --command scripts/verify-recipes.sh                              # 158 checks, nothing skipped
+  --command scripts/verify-recipes.sh                              # 164 checks, nothing skipped
 ```
 
 Every command documented in the skill — and every worked-effect script — has been verified against ImageMagick 7.1.2 (Q16-HDRI), and the GraphicsMagick compatibility claims against GM 1.3.47. Cases needing optional binaries (Ghostscript for PDF/PostScript, `qrencode`/`zbar` for the QR script) skip cleanly when those aren't installed.
 
 ## Status
 
-v0.6 — core skill, references, worked-effect scripts, four subagents, and three slash commands, all verified. See [TODO.md](TODO.md) for the roadmap.
+v0.7 — core skill, references, worked-effect scripts, four subagents, three slash commands, and a PostToolUse sanity-check hook, all verified. See [TODO.md](TODO.md) for the roadmap.
 
 ## License
 
