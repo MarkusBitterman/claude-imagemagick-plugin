@@ -13,7 +13,7 @@ Every image in this README was created by ImageMagick from nothing, by the recip
 - [Usage](#usage) — trigger phrases and slash commands
 - [Install](#install) · [Requirements](#requirements)
 - [Structure](#structure) — repo layout
-- [Testing](#testing) — the 144-check smoke suite
+- [Testing](#testing) — the smoke suite that verifies every documented command
 - [Status](#status) · [License](#license)
 
 ## What you get
@@ -33,11 +33,25 @@ Every image in this README was created by ImageMagick from nothing, by the recip
 
 ## Show, don't tell
 
-One synthesized scene (sky, sun, and mountains drawn from primitives — no input file), run through recipes from `generative.md`:
+Every image below was produced by ImageMagick from primitives — no photographs, no input files — using the exact operators and scripts this plugin documents. Regenerate them all with `scripts/make-demo.sh`.
 
-![effects montage](demo/effects.jpg)
+**Stylize.** One synthesized scene (sky, sun, and mountains drawn from primitives), run through the `generative.md` recipes — `-sepia-tone`, `+polaroid`, a multiply-masked vignette, `copy_opacity` torn edges, `-distort Barrel`:
 
-And the flagship worked example, `skills/imagemagick/scripts/paper-stack.sh` — the README you are reading right now, typeset into letter pages and photographed as a loose stack (yes, this image contains this sentence):
+![effects montage: sepia, polaroid, vignette, torn edges, barrel distortion](demo/effects.jpg)
+
+**Warp.** The built-in distortion family, applied to a grid so the geometry is unmistakable. `-distort Arc` bends a strip into a fan; `-distort Polar` wraps it into concentric rings (the tiny-planet trick, below); `-implode`/`-swirl`/`-wave`/`-distort Barrel` do what they say. The yellow dot is a fixed reference point:
+
+![distortion grid: Arc, swirl, implode, wave, Polar, Barrel](demo/distortions.jpg)
+
+**Tiny planet.** `tiny-planet.sh` draws a seamless landscape panorama, then wraps it with `-distort Polar 0` (ground rotated to the center, `-virtual-pixel edge` streaking the sky into the corners). Seamlessness is the whole game: the sky is purely vertical and the ridgelines share the same height at both ends, so the wrap joins with no radial seam:
+
+![panorama wrapped into a tiny planet](demo/tiny-planet.jpg)
+
+**Presets.** `vignette.sh` ships four looks — the falloff masks use `-define gradient:extent=DiagonalDistance` so darkening reaches the corners instead of clipping flat at the edge midpoints:
+
+![four vignette presets: soft, dark, white, grunge](demo/vignettes.jpg)
+
+**The flagship.** `skills/imagemagick/scripts/paper-stack.sh` — the README you are reading right now, typeset into letter pages and photographed as a loose stack (yes, this image contains this sentence):
 
 ![this README as a loose stack of typeset pages](demo/paper-stack.png)
 
@@ -85,6 +99,7 @@ claude --plugin-dir /path/to/claude-imagemagick-plugin
 
 - **ImageMagick 7** (`magick` binary) — v6 and GraphicsMagick are handled with reduced coverage via the compatibility reference
 - Ghostscript, only for PDF/PostScript input
+- `qrencode` (optional), only for `qr-brand.sh` — ImageMagick can't compute QR error-correction itself; `zbar`'s `zbarimg` (optional) lets that script scan its own output back to prove it still decodes
 - ffmpeg is out of scope: video→GIF requests get pointed there
 
 ## Structure
@@ -108,15 +123,16 @@ TODO.md                         roadmap
 ## Testing
 
 ```sh
-scripts/verify-recipes.sh                                          # 80 checks
-nix shell nixpkgs#ghostscript --command scripts/verify-recipes.sh  # + PDF/PS cases
+scripts/verify-recipes.sh                                          # 155 checks; PDF/QR/scan cases skip
+nix shell nixpkgs#ghostscript nixpkgs#qrencode nixpkgs#zbar \
+  --command scripts/verify-recipes.sh                              # 158 checks, nothing skipped
 ```
 
-Every command documented in the skill has been verified against ImageMagick 7.1.2 (Q16-HDRI), and the GraphicsMagick compatibility claims against GM 1.3.47.
+Every command documented in the skill — and every worked-effect script — has been verified against ImageMagick 7.1.2 (Q16-HDRI), and the GraphicsMagick compatibility claims against GM 1.3.47. Cases needing optional binaries (Ghostscript for PDF/PostScript, `qrencode`/`zbar` for the QR script) skip cleanly when those aren't installed.
 
 ## Status
 
-v0.2 — verified and hardened. See [TODO.md](TODO.md) for the roadmap.
+v0.6 — core skill, references, worked-effect scripts, four subagents, and three slash commands, all verified. See [TODO.md](TODO.md) for the roadmap.
 
 ## License
 

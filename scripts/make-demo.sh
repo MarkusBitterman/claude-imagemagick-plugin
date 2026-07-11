@@ -98,5 +98,56 @@ magick montage \
 "$REPO/skills/imagemagick/scripts/paper-stack.sh" "$REPO/README.md" stack-full.png 3
 magick stack-full.png -resize 520x "$DEMO/paper-stack.png"
 
+# --- 5. A seamless landscape panorama drawn from primitives, then wrapped into
+#     a "tiny planet" by tiny-planet.sh. Seamless = purely vertical sky (every
+#     column identical) and ridgelines whose y matches at x=0 and x=W, so the
+#     Polar wrap joins with no radial seam at 12 o'clock.
+magick -size 1400x420 gradient:'#6fb2e0-#fbe6c0' pano_a.png
+magick pano_a.png \
+  -fill '#9fb6c8' -draw 'polygon 0,420 0,215 180,196 360,232 560,188 780,224 980,192 1180,228 1220,205 1400,215 1400,420' \
+  -fill '#6f8ba0' -draw 'polygon 0,420 0,272 220,252 430,285 640,246 900,286 1120,250 1330,284 1400,272 1400,420' \
+  -fill '#37504f' -draw 'polygon 0,420 0,318 260,300 520,324 760,298 1020,324 1260,300 1400,318 1400,420' \
+  pano_b.png
+magick -size 1400x150 gradient:'#43682f-#1f3318' -attenuate 0.5 +noise Gaussian pano_ground.png
+trees=""; x=20; while [ "$x" -lt 1400 ]; do trees="$trees polygon $x,30 $((x-9)),56 $((x+9)),56"; x=$((x+46)); done
+magick pano_ground.png -fill '#28421f' -draw "$trees" pano_ground2.png
+magick pano_b.png pano_ground2.png -gravity south -compose over -composite \
+  -attenuate 0.2 +noise Gaussian -quality 92 pano.jpg
+"$REPO/skills/imagemagick/scripts/tiny-planet.sh" pano.jpg planet.png 700
+magick pano.jpg -resize 660x pano_disp.png
+magick planet.png -resize 380x380 -background '#f4f4f4' -gravity center -extent 660x380 planet_disp.png
+magick montage \
+  -label 'seamless 1400x420 panorama — sky, ridgelines, treeline, all from primitives' pano_disp.png \
+  -label 'wrapped by  magick ... -distort Polar 0   (tiny-planet.sh)' planet_disp.png \
+  -tile 1x2 -geometry +12+12 -background '#f4f4f4' -font "$FONT" -pointsize 15 -fill '#333' \
+  -quality 90 "$DEMO/tiny-planet.jpg"
+
+# --- 6. The four vignette.sh presets on a crop of that panorama.
+magick pano.jpg -gravity center -resize '420x300^' -extent 420x300 vbase.jpg
+for p in soft dark white grunge; do
+  "$REPO/skills/imagemagick/scripts/vignette.sh" vbase.jpg "vg_$p.jpg" "$p"
+done
+magick montage -label soft vg_soft.jpg -label dark vg_dark.jpg \
+  -label white vg_white.jpg -label grunge vg_grunge.jpg \
+  -tile 2x2 -geometry +8+8 -background '#f4f4f4' -font "$FONT" -pointsize 16 \
+  -quality 90 "$DEMO/vignettes.jpg"
+
+# --- 7. Built-in geometric distortions on a legible grid — the -distort/-swirl/
+#     -implode/-wave family made obvious. The yellow dot is a fixed reference.
+g=""; for i in $(seq 0 30 300); do g="$g line $i,0 $i,300 line 0,$i 300,$i"; done
+magick -size 300x300 gradient:'#5b7cc7-#c66fa8' -stroke white -strokewidth 2 -draw "$g" \
+  -fill '#ffe169' -stroke none -draw 'circle 150,150 150,124' dgrid.png
+magick dgrid.png -virtual-pixel transparent -background none -distort Arc 120 d_arc.png
+magick dgrid.png -swirl 200 d_swirl.png
+magick dgrid.png -implode 0.7 d_implode.png
+magick dgrid.png -background none -wave 10x120 d_wave.png
+magick dgrid.png -virtual-pixel edge -distort Polar 0 d_polar.png
+magick dgrid.png -virtual-pixel transparent -background none -distort Barrel '0.0 0.0 -0.35' d_pin.png
+magick montage \
+  -label '-distort Arc' d_arc.png -label '-swirl' d_swirl.png -label '-implode' d_implode.png \
+  -label '-wave' d_wave.png -label '-distort Polar' d_polar.png -label '-distort Barrel' d_pin.png \
+  -tile 3x2 -geometry '200x200+8+8>' -background '#f4f4f4' -font "$FONT" -pointsize 16 \
+  -quality 90 "$DEMO/distortions.jpg"
+
 magick identify "$DEMO"/*
 du -h "$DEMO"/* | sort -k2
